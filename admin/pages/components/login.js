@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [incorrectPassword, setIncorrectPassword] = useState(false); // State variable for incorrect password
+
+  useEffect(() => {
+    const fetchHoneypotData = async () => {
+      try {
+        // Fetch the honeypot data when the Login page is accessed
+        await axios.get('/api/honeypot/login');
+      } catch (error) {
+        console.error('Error fetching honeypot data:', error);
+      }
+    };
+
+    fetchHoneypotData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send login credentials to server)
-    console.log('Email:', email);
-    console.log('Password:', password);
+    // Simulate incorrect password by displaying the message
+    setIncorrectPassword(true);
+
+    // Log the user's IP address to the console
+    axios.get('https://api.ipify.org?format=json')
+      .then((response) => {
+        console.log('User IP Address:', response.data.ip);
+      })
+      .catch((error) => {
+        console.error('Error fetching user IP address:', error);
+      });
   };
 
   return (
-     
     <div className="flex items-center justify-center h-screen">
       <form onSubmit={handleSubmit} className="w-64 p-4 bg-white shadow-md rounded-md">
         <h2 className="text-2xl font-bold mb-4">Login</h2>
@@ -39,6 +60,10 @@ const Login = () => {
             required
           />
         </div>
+        {/* Display the "Incorrect password" message if incorrectPassword is true */}
+        {incorrectPassword && (
+          <div className="text-red-600 mb-4">Incorrect password</div>
+        )}
         <div className="mb-4">
           <button
             type="submit"
@@ -49,7 +74,6 @@ const Login = () => {
         </div>
       </form>
     </div>
- 
   );
 };
 
