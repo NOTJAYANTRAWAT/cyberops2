@@ -1,6 +1,7 @@
-import axios from 'axios';
+const fs = require('fs');
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
   if (req.method === 'POST') {
     // Extract data from the request body
     const { user_ip, timestamp } = req.body;
@@ -13,7 +14,6 @@ export default async function handler(req, res) {
 
       // Write the honeypot data to a log file
       // Replace 'honeypot_log.txt' with your desired log file name
-      const fs = require('fs');
       fs.appendFileSync('honeypot_log.txt', log_entry + '\n');
 
       res.status(200).end();
