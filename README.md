@@ -45,6 +45,6 @@ The Flask server will run on http://127.0.0.1:8000.
 Start the frontend development server:
 ```bash
 cd CYBEROPS/admin
-npm start
+npm run dev
 ```
 The frontend app will run on http://localhost:3000.
